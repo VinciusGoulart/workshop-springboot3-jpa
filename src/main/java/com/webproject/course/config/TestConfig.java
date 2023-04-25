@@ -1,9 +1,13 @@
 package com.webproject.course.config;
 
+import com.webproject.course.entities.Category;
 import com.webproject.course.entities.Order;
+import com.webproject.course.entities.Product;
 import com.webproject.course.entities.User;
 import com.webproject.course.entities.enums.OrderStatus;
+import com.webproject.course.repositories.CategoryRepository;
 import com.webproject.course.repositories.OrderRepository;
+import com.webproject.course.repositories.ProductRepository;
 import com.webproject.course.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -21,19 +25,46 @@ public class TestConfig implements CommandLineRunner {
     private UserRepository userRepository;
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
 
     @Override
     public void run(String... args) throws Exception {
+        Category cat1 = new Category(null, "Electronics");
+        Category cat2 = new Category(null, "Books");
+        Category cat3 = new Category(null, "Computers");
 
-        User u1 = new User(null, "Venus", "venus@email.com", "88888888", "987654321");
-        User u2 = new User(null, "Earth", "earth@email.com", "77777777", "789456123");
+        Product p1 = new Product(null, "The Lord of the Rings", "Just a book", 90.5, " ");
+        Product p2 = new Product(null, "Smart TV", "Ultra large 90' OLED", 2190.0, " ");
+        Product p3 = new Product(null, "Macbook Pro", "Only for marketing", 1250.0, " ");
+        Product p4 = new Product(null, "PC Gamer", "RGB bonus", 1200.0, " ");
+        Product p5 = new Product(null, "Rails for Dummies", "For those who need", 100.99, " ");
+
+        categoryRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
+        productRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5));
+
+        p1.getCategories().add(cat2);
+        p2.getCategories().add(cat1);
+        p2.getCategories().add(cat3);
+        p3.getCategories().add(cat3);
+        p4.getCategories().add(cat3);
+
+        productRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5));
+
+
+        User u1 = new User(null, "Mercury", "mercury@email.com", "88888888", "987654321");
+        User u2 = new User(null, "Venus", "venus@email.com", "77777777", "789456123");
 
         Order o1 = new Order(null, Instant.parse("2019-06-20T19:53:07Z"), OrderStatus.PAID, u1);
-        Order o2 = new Order(null, Instant.parse("2019-07-21T03:42:10Z"),OrderStatus.SHIPPED, u2);
-        Order o3 = new Order(null, Instant.parse("2019-07-22T15:21:22Z"),OrderStatus.CANCELED, u1);
+        Order o2 = new Order(null, Instant.parse("2019-07-21T03:42:10Z"), OrderStatus.SHIPPED, u2);
+        Order o3 = new Order(null, Instant.parse("2019-07-22T15:21:22Z"), OrderStatus.CANCELED, u1);
 
         userRepository.saveAll(Arrays.asList(u1, u2));
-        orderRepository.saveAll(Arrays.asList(o1,o2,o3));
+        orderRepository.saveAll(Arrays.asList(o1, o2, o3));
     }
 
 
