@@ -60,12 +60,12 @@ public class Product implements Serializable {
         this.description = description;
     }
 
-    public Double getValue() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setValue(Double value) {
-        this.price = value;
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public String getImgURL() {
