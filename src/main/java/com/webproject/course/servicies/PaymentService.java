@@ -4,6 +4,7 @@ import com.webproject.course.entities.Payment;
 import com.webproject.course.entities.User;
 import com.webproject.course.repositories.PaymentRepository;
 import com.webproject.course.repositories.UserRepository;
+import com.webproject.course.servicies.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +15,14 @@ import java.util.Optional;
 public class PaymentService {
 
     @Autowired
-    private PaymentRepository  paymentRepository;
+    private PaymentRepository paymentRepository;
 
-    public List<Payment> findAll(){
+    public List<Payment> findAll() {
         return paymentRepository.findAll();
     }
 
-    public Payment findById(Integer id){
+    public Payment findById(Integer id) {
         Optional<Payment> obj = paymentRepository.findById(id);
-        return obj.get();
+        return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 }
